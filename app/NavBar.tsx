@@ -1,7 +1,13 @@
-import Link, {LinkProps} from "next/link";
+"use client";
+
+import classNames from "classnames";
+import Link from "next/link";
+import {usePathname} from "next/navigation";
 import {FaBug} from "react-icons/fa";
 
 export default function NavBar() {
+  const path = usePathname();
+
   const links = [
     {
       label: "Dashboard",
@@ -22,7 +28,11 @@ export default function NavBar() {
         {links.map(({label, href}) => {
           return (
             <Link
-              className="text-zinc-500 hover:text-zinc-800 transition-colors duration-300"
+              className={classNames({
+                "text-zinc-900": href === path,
+                "text-zinc-500": href !== path,
+                "hover:text-zinc-800 transition-all duration-300": 1,
+              })}
               key={href}
               href={href}
             >
