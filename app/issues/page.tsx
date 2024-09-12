@@ -1,3 +1,9 @@
+import {Button} from "@radix-ui/themes";
+
 export default function Page() {
-  return <div>Issues</div>;
+  return (
+    <div>
+      <Button>New Issue</Button>
+    </div>
+  );
 }
