@@ -1,11 +1,10 @@
 "use client";
 
-import {createIssueAction} from "@/app/_lib/actions";
-import {Button, TextField} from "@radix-ui/themes";
+import {Button, TextArea, TextField} from "@radix-ui/themes";
+import axios from "axios";
 import "easymde/dist/easymde.min.css";
-import React from "react";
+import {useRouter} from "next/navigation";
 import {Controller, useForm} from "react-hook-form";
-import SimpleMdeReact from "react-simplemde-editor";
 
 interface IssueFrom {
   title: string;
@@ -13,27 +12,64 @@ interface IssueFrom {
 }
 
 export default function Page() {
-  const {register, control} = useForm<IssueFrom>();
-  const [desc, setDesc] = React.useState("");
+  const {register, control, handleSubmit, formState} =
+    useForm<IssueFrom>();
+  const router = useRouter();
+  const {
+    errors: {title: titleError, description: descError},
+  } = formState;
+
+  const mdeProps = {
+    ...register("description", {
+      required: "You must specify your issue description",
+    }),
+    ref: undefined,
+  };
 
   return (
-    <form
-      action={createIssueAction.bind(null, desc)}
-      className="max-w-xl space-y-3"
-    >
-      <TextField.Root placeholder="Title" {...register("title")} />
-      <Controller
-        control={control}
-        name="description"
-        render={({field}) => (
-          <SimpleMdeReact
-            {...field}
-            value={desc}
-            onChange={(e) => setDesc(e)}
-          />
+    <div className="max-w-xl mb-4">
+      <form
+        onSubmit={handleSubmit((formData) => {
+          axios
+            .post("/api/issues", formData)
+            .then(() => router.push("/issues"));
+        })}
+        className="max-w-xl space-y-3"
+      >
+        <TextField.Root
+          placeholder="Title"
+          {...register("title", {
+            required: "Issue title is required",
+          })}
+        />
+        {titleError && (
+          <li className="text-red-400 text-sm">
+            <pre className="inline -ml-2">
+              Issue title is missing...
+            </pre>
+          </li>
         )}
-      />
-      <Button type="submit">Submit New Issue</Button>
-    </form>
+        <Controller
+          control={control}
+          name="description"
+          // controlling passed props
+          render={({field}) => (
+            <TextArea
+              {...field}
+              className="h-60"
+              placeholder="Describe your issue"
+            />
+          )}
+        />
+        {descError && (
+          <li className="text-red-400 text-sm">
+            <pre className="inline -ml-2">
+              Issue description is missing...
+            </pre>
+          </li>
+        )}
+        <Button type="submit">Submit New Issue</Button>
+      </form>
+    </div>
   );
 }
