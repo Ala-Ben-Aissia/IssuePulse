@@ -2,10 +2,11 @@
 
 import {createIssueSchema} from "@/app/api/issues/route";
 import ErrorMessage from "@/app/components/ErrorMessage";
-import {Button, TextArea, TextField} from "@radix-ui/themes";
+import {Button, Spinner, TextArea, TextField} from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
 import {useRouter} from "next/navigation";
+import React from "react";
 import {Controller, useForm} from "react-hook-form";
 import {z} from "zod";
 
@@ -19,20 +20,21 @@ export default function Page() {
     errors: {title: titleError, description: descError},
   } = formState;
 
-  const mdeProps = {
-    ...register("description", {
-      required: "You must describe your issue",
-    }),
-    ref: undefined,
-  };
+  const [pending, setPending] = React.useState(false);
+
+  console.log({pending});
 
   return (
     <div className="max-w-xl mb-4">
       <form
         onSubmit={handleSubmit((formData) => {
-          axios
-            .post("/api/issues", formData)
-            .then(() => router.push("/issues"));
+          if (pending) return;
+          setPending(true);
+          axios.post("/api/issues", formData).then(async () => {
+            await new Promise((res) => setTimeout(res, 2000));
+            setPending(false);
+            router.push("/issues");
+          });
         })}
         className="max-w-xl space-y-3"
       >
@@ -46,18 +48,21 @@ export default function Page() {
         <Controller
           control={control}
           name="description"
-          // controlling passed props
           render={({field}) => (
             <TextArea
               {...field}
-              {...mdeProps}
+              {...register("description", {
+                required: "You must describe your issue",
+              })}
               className="h-60"
               placeholder="Describe your issue"
             />
           )}
         />
         {<ErrorMessage>{descError?.message}</ErrorMessage>}
-        <Button type="submit">Submit New Issue</Button>
+        <Button type="submit" disabled={pending}>
+          Submit New Issue {pending && <Spinner />}
+        </Button>
       </form>
     </div>
   );
