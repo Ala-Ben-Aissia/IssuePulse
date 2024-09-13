@@ -31,8 +31,6 @@ export default function Page() {
           if (pending) return;
           setPending(true);
           axios.post("/api/issues", formData).then(async () => {
-            await new Promise((res) => setTimeout(res, 2000));
-            setPending(false);
             router.push("/issues");
           });
         })}
