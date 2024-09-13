@@ -1,19 +1,19 @@
 "use client";
 
-import {Button, TextArea, TextField} from "@radix-ui/themes";
+import {createIssueSchema} from "@/app/api/issues/route";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {Button, Text, TextArea, TextField} from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
 import {useRouter} from "next/navigation";
 import {Controller, useForm} from "react-hook-form";
+import {z} from "zod";
 
-interface IssueFrom {
-  title: string;
-  description: string;
-}
+type IssueForm = z.infer<typeof createIssueSchema>;
 
 export default function Page() {
   const {register, control, handleSubmit, formState} =
-    useForm<IssueFrom>();
+    useForm<IssueForm>({resolver: zodResolver(createIssueSchema)});
   const router = useRouter();
   const {
     errors: {title: titleError, description: descError},
@@ -43,11 +43,9 @@ export default function Page() {
           })}
         />
         {titleError && (
-          <li className="text-red-400 text-sm">
-            <pre className="inline -ml-2">
-              Issue title is missing...
-            </pre>
-          </li>
+          <Text color="red" as="p">
+            {titleError.message}
+          </Text>
         )}
         <Controller
           control={control}
@@ -62,11 +60,9 @@ export default function Page() {
           )}
         />
         {descError && (
-          <li className="text-red-400 text-sm">
-            <pre className="inline -ml-2">
-              Issue description is missing...
-            </pre>
-          </li>
+          <Text color="red" as="p">
+            Issue description is missing...
+          </Text>
         )}
         <Button type="submit">Submit New Issue</Button>
       </form>
