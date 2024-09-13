@@ -1,8 +1,8 @@
 "use client";
 
 import {createIssueSchema} from "@/app/api/issues/route";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {Button, Text, TextArea, TextField} from "@radix-ui/themes";
+import ErrorMessage from "@/app/components/ErrorMessage";
+import {Button, TextArea, TextField} from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
 import {useRouter} from "next/navigation";
@@ -13,7 +13,7 @@ type IssueForm = z.infer<typeof createIssueSchema>;
 
 export default function Page() {
   const {register, control, handleSubmit, formState} =
-    useForm<IssueForm>({resolver: zodResolver(createIssueSchema)});
+    useForm<IssueForm>();
   const router = useRouter();
   const {
     errors: {title: titleError, description: descError},
@@ -21,7 +21,7 @@ export default function Page() {
 
   const mdeProps = {
     ...register("description", {
-      required: "You must specify your issue description",
+      required: "You must describe your issue",
     }),
     ref: undefined,
   };
@@ -42,11 +42,7 @@ export default function Page() {
             required: "Issue title is required",
           })}
         />
-        {titleError && (
-          <Text color="red" as="p">
-            {titleError.message}
-          </Text>
-        )}
+        {<ErrorMessage>{titleError?.message}</ErrorMessage>}
         <Controller
           control={control}
           name="description"
@@ -54,16 +50,13 @@ export default function Page() {
           render={({field}) => (
             <TextArea
               {...field}
+              {...mdeProps}
               className="h-60"
               placeholder="Describe your issue"
             />
           )}
         />
-        {descError && (
-          <Text color="red" as="p">
-            Issue description is missing...
-          </Text>
-        )}
+        {<ErrorMessage>{descError?.message}</ErrorMessage>}
         <Button type="submit">Submit New Issue</Button>
       </form>
     </div>
