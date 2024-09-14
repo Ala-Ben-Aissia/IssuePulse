@@ -1,5 +1,5 @@
 import {Issue} from "@prisma/client";
-import {Table} from "@radix-ui/themes";
+import {Link as RadixLink, Table} from "@radix-ui/themes";
 import Link from "next/link";
 import {getIssues} from "../_lib/data-service";
 import IssueActionBtn from "../components/IssueActionBtn";
@@ -15,7 +15,9 @@ export default async function Page() {
     <div>
       <div className="mb-5">
         <IssueActionBtn>
-          <Link href={"/issues/new"}>New Issue</Link>
+          <Link href={"/issues/new"}>
+            <RadixLink>New Issue</RadixLink>
+          </Link>
         </IssueActionBtn>
       </div>
       <Table.Root variant="surface">
@@ -34,7 +36,12 @@ export default async function Page() {
           {data.map(({id, title, status, createdAt}) => (
             <Table.Row key={id}>
               <Table.Cell>
-                <Link href={`/issues/${id}`}>{title}</Link>
+                <Link
+                  href={`/issues/${id}`}
+                  className="hover:underline text-violet-700"
+                >
+                  {title}
+                </Link>
                 <div className="block md:hidden">
                   <IssueStatusBadge status={status} />
                 </div>

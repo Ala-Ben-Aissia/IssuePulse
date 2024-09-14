@@ -1,7 +1,6 @@
 import prisma from "@/prisma/client";
 import {notFound} from "next/navigation";
 import {z} from "zod";
-import {wait} from "./utils";
 
 interface Issue {
   title: string;
@@ -34,7 +33,7 @@ export async function createIssue(issue: Issue) {
 }
 
 export async function getIssues() {
-  await wait(1000);
+  // await wait(1000);
   try {
     const issues = await prisma.issue.findMany();
     return issues;
