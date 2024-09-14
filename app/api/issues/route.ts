@@ -29,3 +29,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(e, {status: 500});
   }
 }
+
+export async function GET() {
+  try {
+    const issues = await prisma.issue.findMany();
+    return NextResponse.json(issues, {status: 200});
+  } catch (e) {
+    return NextResponse.json(`Error while fetching issues: ${e}`, {
+      status: 500,
+    });
+  }
+}

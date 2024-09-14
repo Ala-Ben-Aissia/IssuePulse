@@ -13,7 +13,7 @@ const createIssueSchema = z.object({
 
 export async function createIssue(issue: Issue) {
   const validation = createIssueSchema.safeParse(issue);
-  console.log({validation});
+
   if (!validation.success) {
     throw new Error(`ValidationErrors:
       ${validation.error.errors.map((e) => e.message)}`);
@@ -28,5 +28,14 @@ export async function createIssue(issue: Issue) {
     });
   } catch (e) {
     throw new Error((e as Error).message);
+  }
+}
+
+export async function getIssues() {
+  try {
+    const issues = await prisma.issue.findMany();
+    return issues;
+  } catch (error) {
+    return `Error while fetching Issues: ${error}`;
   }
 }
