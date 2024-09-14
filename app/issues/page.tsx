@@ -2,6 +2,7 @@ import {Issue} from "@prisma/client";
 import {Button, Table} from "@radix-ui/themes";
 import Link from "next/link";
 import {getIssues} from "../_lib/data-service";
+import IssueStatusBadge from "../components/IssueStatusBadge";
 
 export default async function Page() {
   const data: Issue[] | string = await getIssues();
@@ -29,14 +30,16 @@ export default async function Page() {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {data.map(({title, status, createdAt}) => (
-            <Table.Row>
+          {data.map(({id, title, status, createdAt}) => (
+            <Table.Row key={id}>
               <Table.Cell>
                 {title}
-                <div className="block md:hidden">{status}</div>
+                <div className="block md:hidden">
+                  <IssueStatusBadge status={status} />
+                </div>
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                {status}
+                <IssueStatusBadge status={status} />
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
                 {createdAt.toDateString()}
