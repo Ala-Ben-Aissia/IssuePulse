@@ -1,7 +1,7 @@
 import {getIssue} from "@/app/_lib/data-service";
 import IssueStatusBadge from "@/app/components/IssueStatusBadge";
 import MarkDown from "@/app/components/MarkDown";
-import {Card, Flex, Text} from "@radix-ui/themes";
+import {Card, Flex, Heading, Text} from "@radix-ui/themes";
 
 interface Props {
   params: {
@@ -13,8 +13,8 @@ export default async function Page({params: {issueId}}: Props) {
   const issue = await getIssue(issueId);
 
   return (
-    <div>
-      <h1>{issue.title}</h1>
+    <div className="max-w-xl">
+      <Heading>{issue.title}</Heading>
       <Flex gap="3" align="center" my="2">
         <IssueStatusBadge status={issue.status} />
         <Text>{issue.createdAt.toDateString()}</Text>
