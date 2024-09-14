@@ -2,9 +2,9 @@
 
 import {createIssueSchema} from "@/app/api/issues/route";
 import ErrorMessage from "@/app/components/ErrorMessage";
-import {Button, Spinner, TextArea, TextField} from "@radix-ui/themes";
+import {Button, Spinner, TextField} from "@radix-ui/themes";
+import MDEditor from "@uiw/react-md-editor";
 import axios from "axios";
-import "easymde/dist/easymde.min.css";
 import {useRouter} from "next/navigation";
 import React from "react";
 import {Controller, useForm} from "react-hook-form";
@@ -46,13 +46,13 @@ export default function Page() {
           control={control}
           name="description"
           render={({field}) => (
-            <TextArea
-              {...field}
+            <MDEditor
+              data-color-mode="light"
               {...register("description", {
                 required: "You must describe your issue",
               })}
-              className="h-60"
-              placeholder="Describe your issue"
+              {...field}
+              // commands={[commands.]}
             />
           )}
         />
