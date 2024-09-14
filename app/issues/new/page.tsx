@@ -22,20 +22,19 @@ export default function Page() {
 
   const [pending, setPending] = React.useState(false);
 
-  console.log({pending});
+  function onSubmit() {
+    handleSubmit((formData) => {
+      if (pending) return;
+      setPending(true);
+      axios.post("/api/issues", formData).then(() => {
+        router.push("/issues");
+      });
+    });
+  }
 
   return (
     <div className="max-w-xl mb-4">
-      <form
-        onSubmit={handleSubmit((formData) => {
-          if (pending) return;
-          setPending(true);
-          axios.post("/api/issues", formData).then(async () => {
-            router.push("/issues");
-          });
-        })}
-        className="max-w-xl space-y-3"
-      >
+      <form onSubmit={onSubmit} className="max-w-xl space-y-3">
         <TextField.Root
           placeholder="Title"
           {...register("title", {
