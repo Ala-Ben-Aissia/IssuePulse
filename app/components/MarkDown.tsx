@@ -2,11 +2,12 @@
 
 import {Issue} from "@prisma/client";
 import MDEditor from "@uiw/react-md-editor";
+import rehypeSanitize from "rehype-sanitize";
 
 export default function MarkDown({issue}: {issue: Issue}) {
   return (
     <MDEditor.Markdown
-      // rehypePlugins={[rehypeSanitize]}
+      rehypePlugins={[rehypeSanitize]}
       source={issue.description}
       style={{
         whiteSpace: "pre-wrap",
