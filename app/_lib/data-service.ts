@@ -32,6 +32,7 @@ export async function createIssue(issue: Issue) {
 }
 
 export async function getIssues() {
+  await new Promise((res) => setTimeout(res, 2000));
   try {
     const issues = await prisma.issue.findMany();
     return issues;
