@@ -34,7 +34,7 @@ export default async function Page() {
           {data.map(({id, title, status, createdAt}) => (
             <Table.Row key={id}>
               <Table.Cell>
-                {title}
+                <Link href={`/issues/${id}`}>{title}</Link>
                 <div className="block md:hidden">
                   <IssueStatusBadge status={status} />
                 </div>

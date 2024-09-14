@@ -1,5 +1,7 @@
 import prisma from "@/prisma/client";
+import {notFound} from "next/navigation";
 import {z} from "zod";
+import {wait} from "./utils";
 
 interface Issue {
   title: string;
@@ -32,11 +34,21 @@ export async function createIssue(issue: Issue) {
 }
 
 export async function getIssues() {
-  await new Promise((res) => setTimeout(res, 2000));
+  await wait(1000);
   try {
     const issues = await prisma.issue.findMany();
     return issues;
   } catch (error) {
     return `Error while fetching Issues: ${error}`;
   }
+}
+
+export async function getIssue(issueId: string) {
+  const id = Number(issueId);
+  if (!id) notFound(); // NaN is falsy (typeof NaN === number)
+  const issue = await prisma.issue.findUnique({
+    where: {id},
+  });
+  if (!issue) notFound();
+  return issue;
 }
