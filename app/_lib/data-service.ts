@@ -1,19 +1,14 @@
 import prisma from "@/prisma/client";
 import {notFound} from "next/navigation";
-import {z} from "zod";
+import {issueSchema} from "../validationSchemas";
 
 interface Issue {
   title: string;
   description: string;
 }
 
-export const createIssueSchema = z.object({
-  title: z.string().min(1).max(255),
-  description: z.string().min(1),
-});
-
 export async function createIssue(issue: Issue) {
-  const validation = createIssueSchema.safeParse(issue);
+  const validation = issueSchema.safeParse(issue);
 
   if (!validation.success) {
     throw new Error(`ValidationErrors:
