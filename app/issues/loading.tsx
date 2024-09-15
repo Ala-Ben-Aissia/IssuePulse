@@ -1,15 +1,11 @@
-import {Link, Table} from "@radix-ui/themes";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import IssueActionBtn from "../components/IssueActionBtn";
+import {IssueActionBtn, Skeleton} from "@/app/components";
+import {Table} from "@radix-ui/themes";
 
 export default function Loading() {
   return (
     <div>
       <div className="mb-5">
-        <IssueActionBtn>
-          <Link href={"/issues/new"}>New Issue</Link>
-        </IssueActionBtn>
+        <IssueActionBtn href="/issues/new">New Issue</IssueActionBtn>
       </div>
       <Table.Root variant="surface">
         <Table.Header>

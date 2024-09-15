@@ -1,5 +1,5 @@
+import {Skeleton} from "@/app/components";
 import {Box} from "@radix-ui/themes";
-import Skeleton from "react-loading-skeleton";
 
 export default function Loading() {
   return (

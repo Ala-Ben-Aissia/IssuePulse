@@ -1,9 +1,11 @@
+import {
+  IssueActionBtn,
+  IssueStatusBadge,
+  Link,
+} from "@/app/components";
 import {Issue} from "@prisma/client";
-import {Link as RadixLink, Table} from "@radix-ui/themes";
-import Link from "next/link";
+import {Table} from "@radix-ui/themes";
 import {getIssues} from "../_lib/data-service";
-import IssueActionBtn from "../components/IssueActionBtn";
-import IssueStatusBadge from "../components/IssueStatusBadge";
 
 export default async function Page() {
   const data: Issue[] | string = await getIssues();
@@ -14,11 +16,7 @@ export default async function Page() {
   return (
     <div>
       <div className="mb-5">
-        <IssueActionBtn>
-          <Link href={"/issues/new"}>
-            <RadixLink>New Issue</RadixLink>
-          </Link>
-        </IssueActionBtn>
+        <IssueActionBtn href="/issues/new">New Issue</IssueActionBtn>
       </div>
       <Table.Root variant="surface">
         <Table.Header>
@@ -36,12 +34,7 @@ export default async function Page() {
           {data.map(({id, title, status, createdAt}) => (
             <Table.Row key={id}>
               <Table.Cell>
-                <Link
-                  href={`/issues/${id}`}
-                  className="hover:underline text-violet-700"
-                >
-                  {title}
-                </Link>
+                <Link href={`/issues/${id}`}>{title}</Link>
                 <div className="block md:hidden">
                   <IssueStatusBadge status={status} />
                 </div>

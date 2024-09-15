@@ -1,15 +1,11 @@
+import {Link} from "@/app/components";
 import {Button} from "@radix-ui/themes";
-import Link from "next/link";
-import {PropsWithChildren} from "react";
+import {Props} from "./Link";
 
-export default function IssueActionBtn({
-  children,
-}: PropsWithChildren) {
+export default function IssueActionBtn({href, children}: Props) {
   return (
-    <Button className="mb-5">
-      <Link href={"/issues/new"} color="white">
-        New Issue
-      </Link>
-    </Button>
+    <Link href={href}>
+      <Button className="mb-5">{children}</Button>
+    </Link>
   );
 }
