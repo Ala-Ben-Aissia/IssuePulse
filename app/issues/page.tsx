@@ -1,10 +1,7 @@
-import {
-  IssueActionBtn,
-  IssueStatusBadge,
-  Link,
-} from "@/app/components";
+import {IssueStatusBadge} from "@/app/components";
 import {Issue} from "@prisma/client";
 import {Table} from "@radix-ui/themes";
+import Link from "next/link";
 import {getIssues} from "../_lib/data-service";
 
 export default async function Page() {
@@ -16,7 +13,7 @@ export default async function Page() {
   return (
     <div>
       <div className="mb-5">
-        <IssueActionBtn href="/issues/new">New Issue</IssueActionBtn>
+        <Link href="/issues/new">New Issue</Link>
       </div>
       <Table.Root variant="surface">
         <Table.Header>
