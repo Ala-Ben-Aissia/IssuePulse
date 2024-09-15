@@ -1,6 +1,6 @@
 "use client";
 
-import {createIssueSchema} from "@/app/api/issues/route";
+import {createIssueSchema} from "@/app/_lib/data-service";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import {Button, Spinner, TextField} from "@radix-ui/themes";
 import MDEditor from "@uiw/react-md-editor";
