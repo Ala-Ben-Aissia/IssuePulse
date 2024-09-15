@@ -1,7 +1,7 @@
-import {Card, Flex, Heading} from "@radix-ui/themes";
+import {Heading, Flex, Card} from "@radix-ui/themes";
 import Skeleton from "react-loading-skeleton";
 
-export default function Loading() {
+export default function IssueDetailsFallback() {
   return (
     <div className="max-w-xl">
       <Heading>

@@ -1,36 +1,25 @@
-import {getIssue} from "@/app/_lib/data-service";
-import {IssueActionBtn} from "@/app/components";
-import IssueStatusBadge from "@/app/components/IssueStatusBadge";
-import MarkDown from "@/app/components/MarkDown";
-import {Box, Card, Flex, Heading, Text} from "@radix-ui/themes";
-import {FaRegEdit} from "react-icons/fa";
+import React from "react";
+import EditIssueBtn from "./EditIssueBtn";
+import IssueDetails from "./issueDetails";
+import IssueDetailsFallback from "./IssueDetailsFallback";
 
-interface Props {
-  params: {
-    issueId: string;
-  };
+interface Params {
+  issueId: string;
 }
 
-export default async function Page({params: {issueId}}: Props) {
-  const issue = await getIssue(issueId);
+interface Props {
+  params: Params;
+}
 
+export default function Page({params: {issueId}}: Props) {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      <Box>
-        <Heading>{issue.title}</Heading>
-        <Flex gap="3" align="center" my="2">
-          <IssueStatusBadge status={issue.status} />
-          <Text>{issue.createdAt.toDateString()}</Text>
-        </Flex>
-        <Card className="mt-4">
-          <MarkDown issue={issue} />
-        </Card>
-      </Box>
+      {/* <Grid columns={{initial: "1", md: "2"}} gap="5"> */}
+      <React.Suspense fallback={<IssueDetailsFallback />}>
+        <IssueDetails issueId={issueId} />
+      </React.Suspense>
       <div>
-        <IssueActionBtn href={`/issues/${issue.id}/edit`}>
-          <FaRegEdit className="inline" />
-          Edit Issue
-        </IssueActionBtn>
+        <EditIssueBtn issueId={issueId} />
       </div>
     </div>
   );
