@@ -33,6 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Theme accentColor="iris" appearance="light">
+          {/* <Theme accentColor="iris" appearance="dark"> */}
           <SessionProvider>
             <Container>
               {/* Container will center the app layout */}

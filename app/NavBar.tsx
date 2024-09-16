@@ -11,9 +11,9 @@ import classNames from "classnames";
 import {useSession} from "next-auth/react";
 import Link from "next/link";
 import {usePathname} from "next/navigation";
-import {FaCircleUser} from "react-icons/fa6";
+import {BsCircleFill} from "react-icons/bs";
+import {FaRegCircleUser} from "react-icons/fa6";
 import {IoBug} from "react-icons/io5";
-import {RxAvatar} from "react-icons/rx";
 
 export default function NavBar() {
   const path = usePathname();
@@ -63,8 +63,10 @@ export default function NavBar() {
               <DropdownMenu.Trigger>
                 <Avatar
                   src={data.user?.image!}
-                  fallback={<RxAvatar />}
+                  fallback={<FaRegCircleUser />}
                   referrerPolicy="no-referrer"
+                  // in case it does not ommit the image error
+                  // => see next.config.js
                   radius="full"
                   size="2"
                   className="cursor-pointer"
@@ -83,7 +85,9 @@ export default function NavBar() {
           {status === "unauthenticated" && (
             <Link href="/api/auth/signin">Log in</Link>
           )}
-          {status === "loading" && <FaCircleUser size="32" />}
+          {status === "loading" && (
+            <BsCircleFill size="32" color="lightgray" />
+          )}
         </Box>
       </Flex>
     </nav>
