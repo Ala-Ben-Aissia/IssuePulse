@@ -2,6 +2,7 @@
 
 import ErrorMessage from "@/app/components/ErrorMessage";
 import {issueSchema} from "@/app/validationSchemas";
+import {Issue} from "@prisma/client";
 import {Button, Spinner, TextField} from "@radix-ui/themes";
 import MDEditor from "@uiw/react-md-editor";
 import axios from "axios";
@@ -12,22 +13,12 @@ import {z} from "zod";
 
 type IssueForm = z.infer<typeof issueSchema>;
 
-type Props = {
-  defaultValues?: IssueForm;
-  method?: "post" | "patch";
-  issueId?: string;
-};
-
-export default function IssueForm({
-  defaultValues,
-  method = "post",
-  issueId,
-}: Props) {
-  const {register, control, handleSubmit, formState} =
-    useForm<IssueForm>({
-      defaultValues: method === "patch" ? defaultValues : {},
-    });
+export default function IssueForm({issue}: {issue?: Issue}) {
   const router = useRouter();
+
+  const {register, control, handleSubmit, formState} =
+    useForm<IssueForm>();
+
   const {
     errors: {title: titleError, description: descError},
   } = formState;
@@ -35,14 +26,15 @@ export default function IssueForm({
   const [pending, setPending] = React.useState(false);
 
   function onSubmit() {
-    return handleSubmit((formData) => {
+    return handleSubmit(async (formData: IssueForm) => {
       if (pending) return;
       setPending(true);
-      axios[method](`/api/issues/${issueId || ""}`, formData).then(
-        () => {
-          router.push("/issues");
-        }
-      );
+      if (!issue) {
+        await axios.post("/api/issues", formData);
+      } else {
+        await axios.patch(`/api/issues/${issue.id}`, formData);
+      }
+      router.push("/issues");
     });
   }
 
@@ -54,11 +46,13 @@ export default function IssueForm({
           {...register("title", {
             required: "Issue title is required",
           })}
+          defaultValue={issue?.title}
         />
         {<ErrorMessage>{titleError?.message}</ErrorMessage>}
         <Controller
           control={control}
           name="description"
+          defaultValue={issue?.description}
           render={({field}) => (
             <MDEditor
               data-color-mode="light"

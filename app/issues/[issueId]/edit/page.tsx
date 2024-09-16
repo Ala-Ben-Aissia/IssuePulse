@@ -6,16 +6,7 @@ type Props = {
 };
 
 export default async function Page({params: {issueId}}: Props) {
-  const {title, description} = await getIssue(issueId);
+  const issue = await getIssue(issueId);
 
-  return (
-    <IssueForm
-      defaultValues={{
-        title,
-        description,
-      }}
-      method="patch"
-      issueId={issueId}
-    />
-  );
+  return <IssueForm issue={issue} />;
 }
