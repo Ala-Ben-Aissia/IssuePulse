@@ -5,12 +5,13 @@ import {ReactNode} from "react";
 export type Props = {
   children: ReactNode;
   href: string;
+  color?: "indigo" | "red";
 };
 
-export default function Link({href, children}: Props) {
+export default function Link({href, children, color}: Props) {
   return (
     <NextLink href={href} legacyBehavior>
-      <RadixLink>{children}</RadixLink>
+      <RadixLink color={color}>{children}</RadixLink>
     </NextLink>
   );
 }
