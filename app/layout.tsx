@@ -32,12 +32,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Theme accentColor="violet" appearance="light">
+        <Theme accentColor="iris" appearance="light">
           <SessionProvider>
-            <NavBar />
-            <main className="p-5">
-              <Container>{children}</Container>
-            </main>
+            <Container>
+              {/* Container will center the app layout */}
+              <NavBar />
+              <main className="p-5">{children}</main>
+            </Container>
             {/* <ThemePanel /> */}
           </SessionProvider>
         </Theme>
