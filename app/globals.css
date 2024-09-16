@@ -24,6 +24,9 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .nav-link {
+    @apply text-zinc-500 hover:text-zinc-800 transition-all duration-300;
+  }
 }
 
 /* .radix-themes {
