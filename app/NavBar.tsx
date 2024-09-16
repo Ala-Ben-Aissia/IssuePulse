@@ -1,5 +1,6 @@
 "use client";
 
+import {Skeleton} from "@/app/components";
 import {
   Avatar,
   Box,
@@ -63,6 +64,9 @@ function AuthStatus() {
         <Link className="nav-link" href="/api/auth/signin">
           Log in
         </Link>
+      )}
+      {status === "loading" && (
+        <Skeleton width="3rem" height="20px" />
       )}
     </Box>
   );
