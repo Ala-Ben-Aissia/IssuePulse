@@ -1,12 +1,15 @@
 "use client";
 
+import {Box, Spinner} from "@radix-ui/themes";
 import classNames from "classnames";
+import {useSession} from "next-auth/react";
 import Link from "next/link";
 import {usePathname} from "next/navigation";
 import {FaBug} from "react-icons/fa";
 
 export default function NavBar() {
   const path = usePathname();
+  const {status} = useSession();
 
   const links = [
     {
@@ -27,20 +30,30 @@ export default function NavBar() {
       <ul className="flex space-x-6">
         {links.map(({label, href}) => {
           return (
-            <Link
-              className={classNames({
-                "text-zinc-900": href === path,
-                "text-zinc-500": href !== path,
-                "hover:text-zinc-800 transition-all duration-300": 1,
-              })}
-              key={href}
-              href={href}
-            >
-              {label}
-            </Link>
+            <li key={href}>
+              <Link
+                className={classNames({
+                  "text-zinc-900": href === path,
+                  "text-zinc-500": href !== path,
+                  "hover:text-zinc-800 transition-all duration-300": 1,
+                })}
+                href={href}
+              >
+                {label}
+              </Link>
+            </li>
           );
         })}
       </ul>
+      <Box>
+        {status === "authenticated" && (
+          <Link href="/api/auth/signout">Log Out</Link>
+        )}
+        {status === "unauthenticated" && (
+          <Link href="/api/auth/signin">Log in</Link>
+        )}
+        {status === "loading" && <Spinner />}
+      </Box>
     </nav>
   );
 }

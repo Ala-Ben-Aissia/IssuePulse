@@ -1,6 +1,7 @@
 import {Container, Theme} from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import type {Metadata} from "next";
+import {SessionProvider} from "next-auth/react";
 import localFont from "next/font/local";
 import "./globals.css";
 import NavBar from "./NavBar";
@@ -31,12 +32,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Theme accentColor="iris" appearance="light">
-          <NavBar />
-          <main className="p-5">
-            <Container>{children}</Container>
-          </main>
-          {/* <ThemePanel /> */}
+        <Theme accentColor="violet" appearance="light">
+          <SessionProvider>
+            <NavBar />
+            <main className="p-5">
+              <Container>{children}</Container>
+            </main>
+            {/* <ThemePanel /> */}
+          </SessionProvider>
         </Theme>
       </body>
     </html>
