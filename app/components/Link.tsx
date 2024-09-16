@@ -1,17 +1,17 @@
 import {Link as RadixLink} from "@radix-ui/themes";
-import NextLink from "next/link";
+import {colorPropDef} from "@radix-ui/themes/props";
 import {ReactNode} from "react";
 
 export type Props = {
   children: ReactNode;
   href: string;
-  color?: "indigo" | "red";
+  color?: (typeof colorPropDef)["color"]["default"];
 };
 
 export default function Link({href, children, color}: Props) {
   return (
-    <NextLink href={href} legacyBehavior>
-      <RadixLink color={color}>{children}</RadixLink>
-    </NextLink>
+    <RadixLink href={href} color={color}>
+      {children}
+    </RadixLink>
   );
 }

@@ -22,7 +22,7 @@ export default function Page({params: {issueId}}: Props) {
         </React.Suspense>
       </Box>
       <Box>
-        <Flex direction="column" gap="4">
+        <Flex direction="column" gap="4" className="md:col-span-2">
           <EditIssueBtn issueId={issueId} />
           <DeleteIssueBtn issueId={issueId} />
         </Flex>
