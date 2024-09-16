@@ -1,6 +1,6 @@
 "use client";
 
-import {AlertDialog, Button} from "@radix-ui/themes";
+import {AlertDialog, Button, Spinner} from "@radix-ui/themes";
 import axios from "axios";
 import {useRouter} from "next/navigation";
 import React from "react";
@@ -8,14 +8,18 @@ import {FaTrash} from "react-icons/fa";
 
 export default function DeleteIssueBtn({issueId}: {issueId: string}) {
   const [error, setError] = React.useState(false);
+  const [isPending, setIsPending] = React.useState(false);
+
   const router = useRouter();
 
   async function handleDelete() {
     try {
+      setIsPending(true);
       await axios.delete(`/api/issues/${issueId}`);
       router.push("/issues");
       router.refresh();
     } catch {
+      setIsPending(false);
       setError(true);
     }
   }
@@ -26,7 +30,7 @@ export default function DeleteIssueBtn({issueId}: {issueId: string}) {
         <AlertDialog.Trigger>
           <Button color="red">
             <FaTrash />
-            Delete
+            Delete Issue {isPending && <Spinner />}
           </Button>
         </AlertDialog.Trigger>
         <AlertDialog.Content className="flex flex-col">
@@ -37,7 +41,11 @@ export default function DeleteIssueBtn({issueId}: {issueId: string}) {
           </AlertDialog.Description>
           <div className="flex gap-10">
             <AlertDialog.Action>
-              <Button color="red" onClick={handleDelete}>
+              <Button
+                disabled={isPending}
+                color="red"
+                onClick={handleDelete}
+              >
                 <FaTrash />
                 Delete
               </Button>
