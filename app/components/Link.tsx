@@ -4,7 +4,7 @@ import {ReactNode} from "react";
 
 export type Props = {
   children: ReactNode;
-  href: string;
+  href?: string;
   color?: (typeof colorPropDef)["color"]["default"];
 };
 
