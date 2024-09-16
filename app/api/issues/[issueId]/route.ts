@@ -46,3 +46,15 @@ export async function PATCH(
     });
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  {params: {issueId}}: {params: {issueId: string}}
+) {
+  try {
+    await prisma.issue.delete({where: {id: +issueId}});
+    return new Response(null, {status: 204});
+  } catch (error) {
+    return NextResponse.json("Failed to delete issue", {status: 500});
+  }
+}
