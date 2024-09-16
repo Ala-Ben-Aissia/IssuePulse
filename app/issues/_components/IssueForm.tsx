@@ -35,6 +35,7 @@ export default function IssueForm({issue}: {issue?: Issue}) {
         await axios.patch(`/api/issues/${issue.id}`, formData);
       }
       router.push("/issues");
+      router.refresh(); // refreshes '/issues'
     });
   }
 
@@ -66,7 +67,8 @@ export default function IssueForm({issue}: {issue?: Issue}) {
         />
         {<ErrorMessage>{descError?.message}</ErrorMessage>}
         <Button type="submit" disabled={pending}>
-          Submit New Issue {pending && <Spinner />}
+          {issue ? "Edit" : "Submit New"} Issue{" "}
+          {pending && <Spinner />}
         </Button>
       </form>
     </div>
