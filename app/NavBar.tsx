@@ -40,7 +40,7 @@ function AuthStatus() {
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Avatar
-              src={session.user?.image!}
+              src={session.user?.image ?? undefined}
               fallback={<FaRegCircleUser />}
               referrerPolicy="no-referrer"
               // in case it does not ommit the image error
