@@ -17,8 +17,9 @@ export const {
     }),
   ],
   callbacks: {
-    authorized: ({auth}) => {
+    authorized({auth}) {
       return !!auth?.user;
+      // return true;
     },
   },
   session: {
