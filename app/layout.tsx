@@ -1,5 +1,6 @@
 import {Container, Theme} from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
+import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 import type {Metadata} from "next";
 import {SessionProvider} from "next-auth/react";
 import localFont from "next/font/local";
@@ -35,6 +36,7 @@ export default function RootLayout({
       >
         <Theme accentColor="iris" appearance="light">
           <QueryProvider>
+            <ReactQueryDevtools />
             {/* <Theme accentColor="iris" appearance="dark"> */}
             <SessionProvider>
               <Container>
