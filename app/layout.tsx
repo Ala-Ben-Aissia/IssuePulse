@@ -5,6 +5,7 @@ import {SessionProvider} from "next-auth/react";
 import localFont from "next/font/local";
 import "./globals.css";
 import NavBar from "./NavBar";
+import QueryProvider from "./QueryClientProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,15 +34,17 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Theme accentColor="iris" appearance="light">
-          {/* <Theme accentColor="iris" appearance="dark"> */}
-          <SessionProvider>
-            <Container>
-              {/* Container will center the app layout */}
-              <NavBar />
-              <main className="p-5">{children}</main>
-            </Container>
-            {/* <ThemePanel /> */}
-          </SessionProvider>
+          <QueryProvider>
+            {/* <Theme accentColor="iris" appearance="dark"> */}
+            <SessionProvider>
+              <Container>
+                {/* Container will center the app layout */}
+                <NavBar />
+                <main className="p-5">{children}</main>
+              </Container>
+              {/* <ThemePanel /> */}
+            </SessionProvider>
+          </QueryProvider>
         </Theme>
       </body>
     </html>

@@ -2,22 +2,21 @@
 
 import {Select} from "@radix-ui/themes";
 import {User} from "next-auth";
-import React from "react";
 
-// let usersX: User[];
+// let appUsers: User[];
 
 // const usersPromise = getUsers().then(async (u) => {
 //   await wait(4000);
-//   usersX = u;
+//   appUsers = u;
 // });
 
-export default function AssigneeSelect({users}: {users?: User[]}) {
-  // const USERS = users ?? usersX;
-  // if (!USERS) {
+export default function AssigneeSelect({users}: {users: User[]}) {
+  // const USERS = users ?? appUsers;
+  // if (!appUsers) {
   //   throw usersPromise;
   // }
 
-  const [usersX, setUsersX] = React.useState<User[]>([]);
+  // const [usersX, setUsersX] = React.useState<User[]>([]);
 
   // React.useEffect(() => {
   //   axios.get<User[]>("/api/users").then(({data}) => setUsersX(data));
@@ -31,7 +30,7 @@ export default function AssigneeSelect({users}: {users?: User[]}) {
       <Select.Content>
         <Select.Group>
           <Select.Label>Users</Select.Label>
-          {usersX.map((user) => (
+          {users.map((user) => (
             <Select.Item key={user.id} value="1">
               {user.name}
             </Select.Item>
