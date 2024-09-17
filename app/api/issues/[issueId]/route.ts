@@ -1,4 +1,4 @@
-import {issueSchema} from "@/app/validationSchemas";
+import {patchIssueSchema} from "@/app/validationSchemas";
 import {auth} from "@/auth";
 import {prisma} from "@/prisma/client";
 import {NextRequest, NextResponse} from "next/server";
@@ -14,13 +14,16 @@ export async function PATCH(
   // this is useless because the params is handled in the server from a server component (edit page) and passed to the client IssueForm component so whatever issueId the user puts (in url) will be omitted
 
   // I should've added some sanitization
+
   const session = await auth();
   if (!session) {
-    return NextResponse.json("Gotch ya bitch!", {status: 401});
+    return NextResponse.json("You should log in first!", {
+      status: 401,
+    });
   }
 
   const body = await request.json();
-  const validation = issueSchema.safeParse(body);
+  const validation = patchIssueSchema.safeParse(body);
 
   if (!validation.success) {
     return NextResponse.json(validation.error.format(), {
@@ -28,24 +31,51 @@ export async function PATCH(
     });
   }
 
+  const authenticatedUser = (await auth())?.user;
+  const issue = await prisma.issue.findUnique({
+    where: {id: Number(issueId)},
+  });
+  let user;
+
+  if (!issue)
+    return NextResponse.json(
+      {error: "Issue not found!"},
+      {status: 404}
+    );
+
   try {
-    const issue = await prisma.issue.findUnique({
-      where: {id: Number(issueId)},
-    });
-    if (!issue)
-      return NextResponse.json(
-        {error: "Issue not found!"},
-        {status: 404}
-      );
+    if (body.userId) {
+      user = await prisma.user.findUnique({
+        where: {id: body.userId},
+      });
+
+      if (!user)
+        return NextResponse.json(
+          {error: "User not found!"},
+          {status: 400}
+        );
+      console.log({user, authenticatedUser});
+      if (user.id !== authenticatedUser?.id) {
+        return NextResponse.json(
+          {
+            error: "You don not have permission!",
+          },
+          {status: 403}
+        );
+      }
+    }
+
     const updatedIssue = await prisma.issue.update({
-      where: {id: parseInt(issueId)},
+      where: {id: +issueId},
       data: {
         title: body.title,
+        userId: body.userId,
         description: body.description,
       },
     });
     return NextResponse.json(updatedIssue, {status: 200});
   } catch (e) {
+    console.log({e});
     return NextResponse.json("Failed to update the issue", {
       status: 500,
     });
