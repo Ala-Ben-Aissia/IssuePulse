@@ -1,4 +1,5 @@
 import {issueSchema} from "@/app/validationSchemas";
+import {auth} from "@/auth";
 import {prisma} from "@/prisma/client";
 import {NextRequest, NextResponse} from "next/server";
 
@@ -13,6 +14,10 @@ export async function PATCH(
   // this is useless because the params is handled in the server from a server component (edit page) and passed to the client IssueForm component so whatever issueId the user puts (in url) will be omitted
 
   // I should've added some sanitization
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json("Gotch ya bitch!", {status: 401});
+  }
 
   const body = await request.json();
   const validation = issueSchema.safeParse(body);
@@ -51,6 +56,10 @@ export async function DELETE(
   request: NextRequest,
   {params: {issueId}}: {params: {issueId: string}}
 ) {
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json("Gotch ya bitch!", {status: 401});
+  }
   try {
     await prisma.issue.delete({where: {id: +issueId}});
     return new Response(null, {status: 204});

@@ -1,5 +1,6 @@
 "use server";
 
+import {signIn} from "@/auth";
 import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
 import {createIssue} from "./data-service";
@@ -13,4 +14,8 @@ export async function createIssueAction(
 
   revalidatePath("/issues");
   redirect("/issues");
+}
+
+export async function signInAction() {
+  await signIn("google", {redirectTo: "/issues"});
 }

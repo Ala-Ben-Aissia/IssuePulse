@@ -1,3 +1,4 @@
+import {auth} from "@/auth";
 import {Box, Flex} from "@radix-ui/themes";
 import React from "react";
 import DeleteIssueBtn from "./DeleteIssueBtn";
@@ -13,7 +14,9 @@ interface Props {
   params: Params;
 }
 
-export default function Page({params: {issueId}}: Props) {
+export default async function Page({params: {issueId}}: Props) {
+  const session = await auth();
+
   return (
     <div className="grid gap-4 md:grid-cols-5">
       <Box className="md:col-span-4">
@@ -21,12 +24,14 @@ export default function Page({params: {issueId}}: Props) {
           <IssueDetails issueId={issueId} />
         </React.Suspense>
       </Box>
-      <Box>
-        <Flex direction="column" gap="4" className="md:col-span-2">
-          <EditIssueBtn issueId={issueId} />
-          <DeleteIssueBtn issueId={issueId} />
-        </Flex>
-      </Box>
+      {!!session?.user && (
+        <Box>
+          <Flex direction="column" gap="4" className="md:col-span-2">
+            <EditIssueBtn issueId={issueId} />
+            <DeleteIssueBtn issueId={issueId} />
+          </Flex>
+        </Box>
+      )}
     </div>
   );
 }

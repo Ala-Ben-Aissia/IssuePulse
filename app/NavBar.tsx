@@ -61,7 +61,7 @@ function AuthStatus() {
         </DropdownMenu.Root>
       )}
       {status === "unauthenticated" && (
-        <Link className="nav-link" href="/api/auth/signin">
+        <Link className="nav-link" href="/login">
           Log in
         </Link>
       )}
