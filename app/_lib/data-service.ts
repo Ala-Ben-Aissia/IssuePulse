@@ -46,3 +46,14 @@ export async function getIssue(issueId: string) {
   if (!issue) notFound();
   return issue;
 }
+
+export async function getUsers() {
+  // await wait(5000);
+  try {
+    const users = await prisma.user.findMany();
+    return users;
+  } catch (error) {
+    console.log({error});
+    throw new Error("Cannot retrieve users !");
+  }
+}
