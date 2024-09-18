@@ -1,6 +1,7 @@
 import {prisma} from "@/prisma/client";
 import axios from "axios";
 import {notFound} from "next/navigation";
+import {wait} from "../utils";
 import {issueSchema} from "../validationSchemas";
 
 interface Issue {
@@ -59,8 +60,12 @@ export async function getUsers() {
   }
 }
 
-export function assignIssue(issueId: string, userId: string | null) {
-  axios.patch(`/api/issues/${issueId}`, {
+export async function assignIssue(
+  issueId: string,
+  userId: string | null
+) {
+  await wait(500);
+  return axios.patch(`/api/issues/${issueId}`, {
     userId: userId,
   });
 }
