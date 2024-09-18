@@ -15,16 +15,16 @@ export const statusOptions: Status[] = [
 export const revalidate = 0;
 
 export default async function Page({
-  searchParams: {status},
+  searchParams: {status, sortBy},
 }: {
-  searchParams: {status?: Status};
+  searchParams: {status?: Status; sortBy?: keyof Issue};
 }) {
   const s = status
     ? statusOptions.includes(status)
       ? status
       : "All"
     : "All";
-  const issues: Issue[] | string = await getIssues(s);
+  const issues: Issue[] | string = await getIssues(s, sortBy);
   if (typeof issues === "string") {
     throw new Error(issues);
   }
