@@ -29,10 +29,12 @@ export async function createIssue(issue: Issue) {
   }
 }
 
-export async function getIssues() {
+export async function getIssues(status: string) {
   // await wait(1000);
   try {
-    const issues = await prisma.issue.findMany();
+    const issues = (await prisma.issue.findMany()).filter((issue) =>
+      status === "All" ? true : issue.status === status.toUpperCase()
+    );
     return issues;
   } catch (error) {
     return `Error while fetching Issues: ${error}`;

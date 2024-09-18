@@ -1,14 +1,9 @@
 import {Issue} from "@prisma/client";
 import {Table} from "@radix-ui/themes";
 import Link from "next/link";
-import {getIssues} from "../_lib/data-service";
 import {IssueStatusBadge} from "../components";
 
-export default async function IssueList() {
-  const data: Issue[] | string = await getIssues();
-  if (typeof data === "string") {
-    throw new Error(data);
-  }
+export default async function IssueList({issues}: {issues: Issue[]}) {
   return (
     <Table.Root variant="surface">
       <Table.Header>
@@ -23,7 +18,7 @@ export default async function IssueList() {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {data.map(({id, title, status, createdAt}) => (
+        {issues.map(({id, title, status, createdAt}) => (
           <Table.Row key={id}>
             <Table.Cell>
               <Link href={`/issues/${id}`}>{title}</Link>
