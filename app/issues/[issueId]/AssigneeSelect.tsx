@@ -36,17 +36,7 @@ export default function AssigneeSelect({
 
   // if (!usersX.length) return <Skeleton height="31px" />;
 
-  const {
-    data: users,
-    isLoading,
-    error,
-    status,
-  } = useQuery<User[]>({
-    queryKey: ["users"],
-    queryFn: () => axios.get("/api/users").then((res) => res.data),
-    staleTime: 60000, // refetch users every minute
-    retry: 3, // 3 retries in addition to the first request
-  });
+  const {data: users, status} = useUsers();
 
   switch (status) {
     case "pending":
@@ -62,6 +52,7 @@ export default function AssigneeSelect({
 
     case "success":
       const issueUser = users.find((u) => u.id === issue.userId);
+
       return (
         <>
           <Select.Root
@@ -108,4 +99,13 @@ export default function AssigneeSelect({
     default:
       return "This should be impossible1";
   }
+}
+
+function useUsers() {
+  return useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: () => axios.get("/api/users").then((res) => res.data),
+    staleTime: 60000, // refetch users every minute
+    retry: 3, // 3 retries in addition to the first request
+  });
 }
