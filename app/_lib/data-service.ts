@@ -32,18 +32,9 @@ export async function createIssue(issue: Issue) {
 export async function getIssues(status: string, sortBy?: string) {
   // await wait(1000);
   try {
-    const issues = (
-      await prisma.issue.findMany({
-        orderBy: {
-          [sortBy ?? "title"]: sortBy?.slice(-3) ?? "asc",
-        },
-      })
-    ) // procrastination mode 😴, un-terminated...
-      .filter((issue) =>
-        status === "All"
-          ? true
-          : issue.status === status.toUpperCase()
-      );
+    const issues = (await prisma.issue.findMany()).filter((issue) =>
+      status === "All" ? true : issue.status === status.toUpperCase()
+    );
     return issues;
   } catch (error) {
     return `Error while fetching Issues: ${error}`;
