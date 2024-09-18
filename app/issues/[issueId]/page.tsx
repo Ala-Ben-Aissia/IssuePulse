@@ -1,4 +1,4 @@
-import {getUsers} from "@/app/_lib/data-service";
+import {getIssue, getUsers} from "@/app/_lib/data-service";
 import {auth} from "@/auth";
 import {Box, Flex} from "@radix-ui/themes";
 import React from "react";
@@ -20,6 +20,7 @@ export default async function Page({params: {issueId}}: Props) {
   const session = await auth();
   console.log("Authenticated!");
   const users = await getUsers();
+  const issue = await getIssue(issueId);
 
   return (
     <div className="grid gap-4 md:grid-cols-5">
@@ -34,7 +35,7 @@ export default async function Page({params: {issueId}}: Props) {
             {/* <React.Suspense fallback={<Skeleton height="31px" />}>
               <AssigneeSelect />
             </React.Suspense> METHOD 1: KCD */}
-            <AssigneeSelect users={users} />
+            <AssigneeSelect users={users} issue={issue} />
             {/* <AssigneeSelect /> METHOD 3: CSR (not the best UX) */}
             <EditIssueBtn issueId={issueId} />
             <DeleteIssueBtn issueId={issueId} />

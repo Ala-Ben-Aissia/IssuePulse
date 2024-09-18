@@ -1,4 +1,5 @@
 import {prisma} from "@/prisma/client";
+import axios from "axios";
 import {notFound} from "next/navigation";
 import {issueSchema} from "../validationSchemas";
 
@@ -56,4 +57,10 @@ export async function getUsers() {
     console.log({error});
     throw new Error("Cannot retrieve users !");
   }
+}
+
+export function assignIssue(issueId: string, userId: string | null) {
+  axios.patch(`/api/issues/${issueId}`, {
+    userId: userId,
+  });
 }

@@ -1,6 +1,8 @@
 "use client";
 
+import {assignIssue} from "@/app/_lib/data-service";
 import {Skeleton} from "@/app/components";
+import {Issue} from "@prisma/client";
 import {Select} from "@radix-ui/themes";
 import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
@@ -15,8 +17,10 @@ import {User} from "next-auth";
 
 export default function AssigneeSelect({
   users: usersSC,
+  issue,
 }: {
   users: User[];
+  issue: Issue;
 }) {
   // const USERS = users ?? appUsers;
   // if (!appUsers) {
@@ -48,24 +52,31 @@ export default function AssigneeSelect({
       return <Skeleton height="32px" />;
 
     case "error":
-      // return (
-      //   <pre className="whitespace-pre-wrap text-red-400">
-      //     {error.message}
-      //   </pre>
-      // );
-      return;
+      return (
+        <pre className="whitespace-pre-wrap text-red-400">
+          {error.message}
+        </pre>
+      );
+    // return;
 
     case "success":
       return (
-        <Select.Root>
+        <Select.Root
+          defaultValue={issue.userId ?? "null"}
+          onValueChange={(userId) => {
+            const id = userId === "null" ? null : userId;
+            assignIssue(issue.id + "", id);
+          }}
+        >
           <Select.Trigger placeholder="Assign..." />
           <Select.Content>
             <Select.Group>
               <Select.Label className="font-extrabold">
                 Users
               </Select.Label>
+              <Select.Item value="null">Unassigned</Select.Item>
               {users.map((user) => (
-                <Select.Item key={user.id} value="1">
+                <Select.Item key={user.id} value={user.id as string}>
                   {user.name}
                 </Select.Item>
               ))}

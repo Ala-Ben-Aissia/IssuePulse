@@ -54,15 +54,6 @@ export async function PATCH(
           {error: "User not found!"},
           {status: 400}
         );
-      console.log({user, authenticatedUser});
-      if (user.id !== authenticatedUser?.id) {
-        return NextResponse.json(
-          {
-            error: "You don not have permission!",
-          },
-          {status: 403}
-        );
-      }
     }
 
     const updatedIssue = await prisma.issue.update({
